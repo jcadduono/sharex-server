@@ -19,7 +19,15 @@ const name_possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 var name_len = config.min_length
 
 app.post('/upload', async (req, res) => {
-	if (!req.headers.password || req.headers.password !== config.password)
+	let password = ''
+	let browser = false
+	if (req.headers.password)
+		password = req.headers.password
+	else if (req.body.password) {
+		password = req.body.password
+		browser = true
+	}
+	if (password !== config.password)
 		return res.status(403).send('invalid password').end()
 
 	if (!req.files || Object.keys(req.files).length == 0 || !req.files.file)
@@ -43,9 +51,11 @@ app.post('/upload', async (req, res) => {
 				return res.status(500).send(`failed to store file on host: ${err}`).end()
 
 			console.log(`stored uploaded file '${req.files.file.name}' as '${fname}'`)
-			res.send({
-				url: `${site}${url}/${fname}`
-			})
+			if (browser) {
+				res.send(`${site}${url}/${fname}`)
+			} else {
+				res.send({ url: `${site}${url}/${fname}` })
+			}
 		})
 	} catch (err) {
 		return res.status(500).send(`failed to store file on host: ${err}`).end()
