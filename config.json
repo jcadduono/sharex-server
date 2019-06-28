@@ -1,0 +1,9 @@
+{
+	"password": "wowthatisaterriblepassword",
+	"store_directory": "/home/jc/share.adduono.com",
+	"site": "https://share.adduono.com",
+	"url_prefix": "",
+	"sock": "/home/jc/sharex-server/share.adduono.com.sock",
+	"max_size_mb": 50,
+	"min_length": 4
+}
