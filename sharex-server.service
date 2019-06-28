@@ -1,0 +1,16 @@
+[Unit]
+Description=ShareX server
+
+[Service]
+ExecStart=/home/jc/sharex-server/index.js
+Restart=always
+User=jc
+Group=jc
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+WorkingDirectory=/home/jc/sharex-server
+After=network-online.target
+Wants=network-online.target
+
+[Install]
+WantedBy=multi-user.target
