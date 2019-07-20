@@ -13,7 +13,7 @@ app.use(fileUpload({
 
 const storage = config.store_directory
 const site = config.site
-const url = config.url_prefix
+const url = site + config.url_prefix
 
 const name_possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.split('')
 var name_len = config.min_length
@@ -34,7 +34,7 @@ app.post('/upload', async (req, res) => {
 		return res.status(400).send('no file was uploaded').end()
 
 	if (req.files.file.truncated)
-		return res.status(400).send('file was too large, must be under 50MB').end()
+		return res.status(400).send(`file was too large, must be under ${config.max_size_mb} MB`).end()
 
 	if (!req.files.file.name)
 		return res.status(400).send('a file must have a name').end()
@@ -52,9 +52,9 @@ app.post('/upload', async (req, res) => {
 
 			console.log(`stored uploaded file '${req.files.file.name}' as '${fname}'`)
 			if (browser) {
-				res.send(`${site}${url}/${fname}`)
+				res.send(`${url}/${fname}`)
 			} else {
-				res.send({ url: `${site}${url}/${fname}` })
+				res.send({ url: `${url}/${fname}` })
 			}
 		})
 	} catch (err) {
@@ -76,7 +76,7 @@ async function generatesxcu() {
 			'FileFormName': 'file',
 			'URL': '$json:url$'
 		}))
-		console.log(`created sxcu file at: ${site}${url}/share.sxcu`)
+		console.log(`created sxcu file at: ${url}/share.sxcu`)
 	} catch (err) {
 		console.log(`failed to generate sxcu file: ${err}`)
 	}
